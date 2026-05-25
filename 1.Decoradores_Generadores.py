@@ -48,3 +48,47 @@ def print_number(a):
     print(b)
     b =9
 print_number(3)
+
+
+# Decoradores con 
+
+
+## Closures
+
+class Averager():
+    def __init__ (self):
+        self.series = []
+    def __call__(self,new_value):
+        self.series.append(new_value)
+        total = sum(self.series)
+        return total / len(self.series)
+avg = Averager()
+avg(12)
+
+### Decorador con parametros 3 funciones 
+import time
+def reintentar (veces =3, delay=1.0): # Capa de parametros
+    def decorador(func):                # Capa que recibe la funcion
+        def wrapper(*args,**kwargs):    # Capa que se ejecuta para cada llamada
+            for i in range(veces):
+                try:
+                    return func(*args,**kwargs)
+                except Exception as e:
+                    print(f"intenti {i+1} fallo: {e}")
+                    if i == veces -1:
+                        raise
+                    time.sleep(delay)
+        return wrapper 
+    return decorador
+
+fabrica = reintentar(veces = 3, delay=0.5)
+print(fabrica)
+def llamar_api(url):
+    print(f"llamando {url}...")
+    raise Exception("sin conexión")
+decorada = fabrica(llamar_api)
+print(decorada)
+decorada("http://ejemplo.com")
+
+
+
